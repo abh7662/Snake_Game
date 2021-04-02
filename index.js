@@ -26,6 +26,7 @@ function move(){
   (snake[0] + 10 > 100 && direction === 10) || 
   (snake[0] + 10 < 0 && direction === -10) || 
   squares[snake[0] + direction].classList.contains('snake')){
+    score.textContent = "Game Over"
     return clearInterval(timerId)
   }
   const tail = snake.pop()
@@ -36,9 +37,9 @@ function move(){
     //remove the class of apple
     squares[appleIndex].classList.remove("apple")
     //grow our snake by adding class of snake to it
-    squares[appleIndex].classList.add("snake")
+    squares[tail].classList.add("snake")
     //grow our snake array
-    snake.unshift(appleIndex)    
+    snake.push(tail)    
     //generate new apple
     generateApples()
     //add one to the score
@@ -47,12 +48,12 @@ function move(){
     score.textContent = score_val
     //speed up our snake
     interValtime *= .9
-    console.log(interValtime)
+    // console.log(interValtime)
     clearInterval(timerId)
     timerId = setInterval(move, interValtime)
 }
 
-  console.log(snake)
+  // console.log(snake)
   squares[snake[0]].classList.add("snake")
   
 }
@@ -60,7 +61,7 @@ function move(){
 function generateApples(){
   do{
     appleIndex = Math.floor(Math.random()*100)
-    console.log(appleIndex)
+    // console.log(appleIndex)
   }while(squares[appleIndex].classList.contains("snake"))
   squares[appleIndex].classList.add("apple")
 }
@@ -82,19 +83,19 @@ startButton.addEventListener("click", function(){
 function control(e){
   switch(e.keyCode) {
     case 40:
-    console.log('pressed down')
+    // console.log('pressed down')
     direction = 10
     break
     case 38:
-    console.log('pressed up')
+    // console.log('pressed up')
     direction = -10
     break
     case 37: 
-    console.log('pressed left')
+    // console.log('pressed left')
     direction = -1
     break
     case 39:
-    console.log('pressed right')
+    // console.log('pressed right')
     direction = 1
     break
 }
