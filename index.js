@@ -1,9 +1,14 @@
 const grid = document.querySelector(".grid")
 const startButton = document.querySelector("#start")
 const score = document.querySelector("#score")
-let snake = [21,20,19]
+let score_val = 0
+let snake = [2,1,0]
 let squares = []
 let direction = 1
+let appleIndex = 0
+let width = 10
+let interValtime = 1000
+let timerId = 0
 function createGrid(){
     for(let i =0 ;i<100;i++){
       const square = document .createElement("div")
@@ -26,20 +31,54 @@ function move(){
   const tail = snake.pop()
   squares[tail].classList.remove("snake")
   snake.unshift(snake[0]+direction)
+
+  if (snake[0] === appleIndex) {
+    //remove the class of apple
+    squares[appleIndex].classList.remove("apple")
+    //grow our snake by adding class of snake to it
+    squares[appleIndex].classList.add("snake")
+    //grow our snake array
+    snake.unshift(appleIndex)    
+    //generate new apple
+    generateApples()
+    //add one to the score
+    score_val++
+    //display our score
+    score.textContent = score_val
+    //speed up our snake
+    interValtime *= .9
+    console.log(interValtime)
+    clearInterval(timerId)
+    timerId = setInterval(move, interValtime)
+}
+
   console.log(snake)
   squares[snake[0]].classList.add("snake")
+  
 }
-let timerId = setInterval(move, 1000)
+
+function generateApples(){
+  do{
+    appleIndex = Math.floor(Math.random()*100)
+    console.log(appleIndex)
+  }while(squares[appleIndex].classList.contains("snake"))
+  squares[appleIndex].classList.add("apple")
+}
+
 startButton.addEventListener("click", function(){
-  console.log(timerId)
-  if(timerId){
-    clearInterval(timerId)
-    timerId = 0
-  }
-  else{
-    timerId = setInterval(move, 1000)
-  }
+  squares[appleIndex].classList.remove("apple")
+  snake.forEach(index => squares[index].classList.remove("snake"))
+  score_val = 0
+  snake = [2,1,0]
+  interValtime = 1000
+  direction = 1
+  score.textContent = score_val
+  generateApples()
+  clearInterval(timerId)
+  snake.forEach(index => squares[index].classList.add("snake"))
+  timerId = setInterval(move, interValtime)
 })
+
 function control(e){
   switch(e.keyCode) {
     case 40:
